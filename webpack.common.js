@@ -19,7 +19,23 @@ module.exports = {
     rules: [
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: [
+          "style-loader",
+          "css-loader",
+          {
+            loader: "postcss-loader",
+            options: {
+              postcssOptions: {
+                // This will pick up your postcss.config.js automatically
+                // or you can inline plugins here
+                plugins: {
+                  "@tailwindcss/postcss": {},
+                  // other plugins if needed
+                },
+              },
+            },
+          },
+        ],
       },
       {
         test: /\.html$/i,
