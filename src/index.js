@@ -1,19 +1,19 @@
-import "sanitize.css";
-// optionally:
-// import 'sanitize.css/forms.css';
-// import 'sanitize.css/typography.css';
+// //! DO NOT TOUCH THESE LINES
+// import "./styles.css";
+// //! DO NOT TOUCH THESE LINES
 
-import "./styles.css";
+export class Ship {
+  constructor(length, hits, isSunk) {
+    this.length = length;
+    this.hits = hits;
+    this.isSunk = isSunk;
+  }
 
-function component() {
-  const element = document.createElement("div");
-  return element;
+  hit() {
+    return (this.hits += 1);
+  }
+
+  isSunk() {
+    return this.length <= this.hits;
+  }
 }
-
-document.body.appendChild(component());
-console.log("Hello from src/index.js");
-const me = "hello";
-// test.js
-
-const unused = 42; // ❌ 'unused' is defined but never used.
-console.log("hello"); // ✅ allowed

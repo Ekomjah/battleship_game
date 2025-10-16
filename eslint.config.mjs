@@ -8,7 +8,7 @@ export default defineConfig([
   {
     files: ["**/*.js"],
     languageOptions: {
-      globals: globals.browser,
+      globals: { ...globals.browser, ...globals.jest },
     },
     rules: {
       "no-unused-vars": "warn",

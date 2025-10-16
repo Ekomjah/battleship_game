@@ -1,7 +1,4 @@
 @import "tailwindcss";
-body{
-    width: 100%;
-    background: red;
+body {
+  width: 100%;
 }
-
-

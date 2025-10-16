@@ -26,12 +26,10 @@ module.exports = {
             loader: "postcss-loader",
             options: {
               postcssOptions: {
-                // This will pick up your postcss.config.js automatically
-                // or you can inline plugins here
-                plugins: {
-                  "@tailwindcss/postcss": {},
-                  // other plugins if needed
-                },
+                plugins: [
+                  require("@tailwindcss/postcss"),
+                  require("autoprefixer"),
+                ],
               },
             },
           },
