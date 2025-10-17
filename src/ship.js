@@ -30,8 +30,8 @@ export class GameBoard {
     }
     return arr;
   }
-  placeShipFrom(ordinate, abscissa, orientation) {
-    let ship = new Ship(5, 0, "war");
+  placeShipFrom(ordinate, abscissa, orientation, name = "war", shipLength = 5) {
+    let ship = new Ship(shipLength, 0, name);
     if (orientation === "horizontal") {
       if (this.board[ordinate].length - abscissa > ship.length) {
         for (let i = abscissa; i < abscissa + ship.length; i++) {
@@ -39,27 +39,25 @@ export class GameBoard {
         }
         return this.board;
       } else {
-        return "not enough space for" + orientation;
+        throw new Error("not enough space for" + orientation);
       }
     } else {
-      if (this.board.length - abscissa > ship.length) {
-        for (let i = abscissa; i < ship.length; i++) {
-          this.board[i][0] = ship.name;
+      if (this.board.length - ordinate > ship.length) {
+        for (let i = ordinate; i < ordinate + ship.length; i++) {
+          this.board[i][abscissa] = ship.name;
         }
         return this.board;
       } else {
-        return "not enough space for " + orientation;
+        throw new Error("not enough space for " + orientation);
       }
     }
   }
-}
 
-export class Counter {
-  constructor() {
-    this.count = 0;
-  }
-
-  add() {
-    this.count += 1;
+  receiveAttack(ordinate, abscissa) {
+    if (this.board[ordinate][abscisaa] !== null) {
+      return (this.board[ordinate][abscissa] = "hit");
+    } else {
+      return (this.board[ordinate][abscissa] = "miss");
+    }
   }
 }
