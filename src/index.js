@@ -1,19 +1,27 @@
 // //! DO NOT TOUCH THESE LINES
-// import "./styles.css";
+import "./styles.css";
+import { HumanPlayer, Computer } from "../src/ship.js";
+import { javascript } from "webpack";
 // //! DO NOT TOUCH THESE LINES
+const root = document.querySelector("#root");
+const human = new HumanPlayer("ekom");
 
-export class Ship {
-  constructor(length, hits, isSunk) {
-    this.length = length;
-    this.hits = hits;
-    this.isSunk = isSunk;
-  }
-
-  hit() {
-    return (this.hits += 1);
-  }
-
-  isSunk() {
-    return this.length <= this.hits;
+for (let i = 0; i < human.board.board.length; i++) {
+  const gridParent = document.createElement("div");
+  gridParent.classList.add("parent");
+  root.appendChild(gridParent);
+  for (let j = 0; j < human.board.board[i].length; j++) {
+    const gridChild = document.createElement("div");
+    if (
+      human.board.board[i][j] !== null &&
+      human.board.board[i][j] !== "miss" &&
+      human.board.board[i][j] !== "hit"
+    ) {
+      gridChild.classList.add("ship");
+    }
+    //  else {
+    // }
+    gridChild.classList.add("child");
+    gridParent.appendChild(gridChild);
   }
 }

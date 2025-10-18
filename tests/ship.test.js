@@ -1,4 +1,4 @@
-import { Ship, GameBoard, Counter } from "../src/ship.js";
+import { Ship, GameBoard, HumanPlayer, Computer } from "../src/ship.js";
 
 let ship = new Ship(5, 0, false);
 
@@ -160,5 +160,63 @@ describe("GameBoard tests", () => {
         expect(el[i]).toBeNull();
       });
     });
+  });
+});
+
+describe("human play", () => {
+  const v = "vertical";
+  const hor = "horizontal";
+  const human = new HumanPlayer("player");
+  it("should place the carrier ship", () => {
+    human.board.placeShipFrom(3, 2, v, "carrier", 5);
+    human.board.board.forEach((el, i) => {
+      if (i > 2 && i < 8) {
+        expect(el[2]).toContain("carrier");
+      } else {
+        expect(el[2]).toBeNull();
+      }
+    });
+
+    human.board.board.forEach((row) => {
+      row.forEach((cell, j) => {
+        if (j !== 2) {
+          expect(cell).toBeNull();
+        }
+      });
+    });
+  });
+
+  it("should add the battleship", () => {
+    human.board.placeShipFrom(2, 4, hor, "battleship", 4);
+    human.board.board.forEach((el, i) => {
+      if (i > 2 && i < 8) {
+        expect(el[2]).toContain("carrier");
+      } else {
+        expect(el[2]).toBeNull();
+      }
+    });
+
+    human.board.board[2].forEach((cell, j) => {
+      if (j > 3 && j < 8) {
+        expect(cell).toMatch("battleship");
+      } else {
+        expect(cell).toBeNull();
+      }
+    });
+  });
+
+  it("should receive an attack", () => {
+    expect(human.board.receiveAttack(3, 2)).toMatch("hit");
+    expect(human.board.receiveAttack(3, 2)).toBeNull();
+    expect(human.board.receiveAttack(4, 2)).toMatch("hit");
+    expect(human.board.receiveAttack(5, 2)).toMatch("hit");
+    expect(human.board.receiveAttack(7, 8)).toMatch("miss");
+    expect(human.board.receiveAttack(9, 9)).toMatch("miss");
+    expect(human.board.receiveAttack(9, 9)).toBeNull();
+    expect(human.board.receiveAttack(2, 4)).toMatch("hit");
+    expect(human.board.receiveAttack(2, 5)).toMatch("hit");
+    expect(human.board.receiveAttack(2, 6)).toMatch("hit");
+    expect(human.board.receiveAttack(2, 7)).toMatch("hit");
+    expect(human.board.receiveAttack(2, 8)).toMatch("miss");
   });
 });

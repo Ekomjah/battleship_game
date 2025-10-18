@@ -18,6 +18,7 @@ export class Ship {
 export class GameBoard {
   constructor() {
     this.board = this.init();
+    this.instance = [];
   }
 
   init() {
@@ -37,6 +38,7 @@ export class GameBoard {
         for (let i = abscissa; i < abscissa + ship.length; i++) {
           this.board[ordinate][i] = ship.name;
         }
+        this.instance.push(ship);
         return this.board;
       } else {
         throw new Error("not enough space for" + orientation);
@@ -46,6 +48,7 @@ export class GameBoard {
         for (let i = ordinate; i < ordinate + ship.length; i++) {
           this.board[i][abscissa] = ship.name;
         }
+        this.instance.push(ship);
         return this.board;
       } else {
         throw new Error("not enough space for " + orientation);
@@ -54,10 +57,37 @@ export class GameBoard {
   }
 
   receiveAttack(ordinate, abscissa) {
-    if (this.board[ordinate][abscisaa] !== null) {
-      return (this.board[ordinate][abscissa] = "hit");
+    if (
+      this.board[ordinate][abscissa] === "hit" ||
+      this.board[ordinate][abscissa] === "miss"
+    )
+      return null;
+    if (this.board[ordinate][abscissa] !== null) {
+      const el = this.instance.find(
+        (obj) => obj.name === this.board[ordinate][abscissa]
+      );
+      if (!el.isSunk()) {
+        el.hit();
+        this.board[ordinate][abscissa] = "hit";
+        return "hit";
+      }
+      return "isSunk";
     } else {
       return (this.board[ordinate][abscissa] = "miss");
     }
+  }
+}
+
+export class HumanPlayer {
+  constructor(name) {
+    this.name = name;
+    this.board = new GameBoard();
+  }
+}
+
+export class Computer {
+  constructor(name) {
+    this.name = name;
+    this.board = new GameBoard();
   }
 }

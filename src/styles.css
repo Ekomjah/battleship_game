@@ -1,4 +1,29 @@
 @import "tailwindcss";
 body {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
+}
+
+main {
+  border: 1px solid;
+}
+
+.parent {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  max-width: 800px;
   width: 100%;
+}
+
+.child {
+  border: 0.2px solid;
+  padding: 1rem;
+}
+
+.ship{
+  background-color: red;
 }
