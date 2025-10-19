@@ -9,6 +9,11 @@ body {
 }
 
 main {
+  display: flex;
+  gap: 1rem;
+}
+
+.border {
   border: 1px solid;
 }
 

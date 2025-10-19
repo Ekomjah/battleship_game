@@ -1,6 +1,7 @@
 // //! DO NOT TOUCH THESE LINES
 import "./styles.css";
 import grid from "./playerBoard.js";
+import computer from "./computerBoard.js";
 // //! DO NOT TOUCH THESE LINES
 
 // function grid() {
@@ -53,6 +54,5 @@ import grid from "./playerBoard.js";
 //   }
 // }
 
-
-
 grid();
+computer();
