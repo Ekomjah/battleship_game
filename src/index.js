@@ -1,6 +1,6 @@
 // //! DO NOT TOUCH THESE LINES
 import "./styles.css";
-import { HumanPlayer, Computer } from "../src/ship.js";
+import { HumanPlayer, Computer } from "./ship.js";
 import { javascript } from "webpack";
 // //! DO NOT TOUCH THESE LINES
 const root = document.querySelector("#root");

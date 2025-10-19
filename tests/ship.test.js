@@ -1,4 +1,4 @@
-import { Ship, GameBoard, HumanPlayer, Computer } from "../src/ship.js";
+import { Ship, GameBoard, HumanPlayer, Computer } from "./code.js";
 
 let ship = new Ship(5, 0, false);
 
