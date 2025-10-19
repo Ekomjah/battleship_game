@@ -34,14 +34,14 @@ export class GameBoard {
   placeShipFrom(ordinate, abscissa, orientation, name = "war", shipLength = 5) {
     let ship = new Ship(shipLength, 0, name);
     if (orientation === "horizontal") {
-      if (this.board[ordinate].length - abscissa > ship.length) {
+      if (this.board[ordinate].length - abscissa > ship.length - 1) {
         for (let i = abscissa; i < abscissa + ship.length; i++) {
           this.board[ordinate][i] = ship.name;
         }
         this.instance.push(ship);
         return this.board;
       } else {
-        throw new Error("not enough space for" + orientation);
+        throw new Error("not enough space for " + orientation);
       }
     } else {
       if (this.board.length - ordinate > ship.length) {
