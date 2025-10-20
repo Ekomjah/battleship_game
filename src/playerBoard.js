@@ -72,13 +72,15 @@ function playBoard() {
       const filtered = [...all].filter(
         (el) => !el.classList.contains("miss") && !el.classList.contains("hit")
       );
-      const randomRow = Math.floor((Math.random() * filtered.length) / 10);
-      const randomCol = Math.floor((Math.random() * filtered.length) / 10);
+      if (filtered.length === 0) return;
+      const index = Math.floor(Math.random() * filtered.length);
+      const cell = filtered[index];
+      const indexOfPlayed = [...all].indexOf(cell);
+      const randomRow = Math.floor(indexOfPlayed / 10);
+      const randomCol = Math.floor(indexOfPlayed % 10);
       try {
         console.log(isHumanTurn());
         const result = human.board.receiveAttack(randomRow, randomCol);
-        const index = randomRow * 10 + randomCol;
-        const cell = filtered[index];
         if (result === "hit") {
           cell.classList.add("hit");
         } else if (result === "miss") {
