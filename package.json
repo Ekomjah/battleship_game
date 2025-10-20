@@ -10,7 +10,7 @@
     "lint": "eslint --ext .js --ext .jsx .",
     "prepare": "husky",
     "predeploy": "pnpm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "keywords": [],
   "author": "",
