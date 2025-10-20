@@ -1,9 +1,15 @@
+import moon, { isHumanTurn } from "./state.js";
 import { HumanPlayer, Computer } from "./ship.js";
+
 const computer = new Computer("mac");
 const root = document.querySelector("#root");
 const first = document.createElement("div");
+const third = document.createElement("div");
 root.appendChild(first);
-first.classList.add("border")
+first.classList.add("border");
+third.classList.add("border");
+root.appendChild(third);
+
 export default function computerGrid() {
   for (let i = 0; i < computer.board.board.length; i++) {
     const gridParent = document.createElement("div");
@@ -11,7 +17,7 @@ export default function computerGrid() {
     first.appendChild(gridParent);
     for (let j = 0; j < computer.board.board[i].length; j++) {
       const gridChild = document.createElement("div");
-      gridChild.classList.add("child");
+      gridChild.classList.add("child-c");
 
       gridParent.appendChild(gridChild);
 
@@ -42,5 +48,55 @@ export default function computerGrid() {
         console.log(err);
       }
     }
+  }
+  playBoard();
+}
+
+function playBoard() {
+  for (let i = 0; i < computer.board.board.length; i++) {
+    const gridParent = document.createElement("div");
+    gridParent.classList.add("parent");
+    third.appendChild(gridParent);
+    for (let j = 0; j < computer.board.board[i].length; j++) {
+      const gridChild = document.createElement("div");
+      gridChild.classList.add("child");
+      gridChild.classList.add("computer");
+      gridParent.appendChild(gridChild);
+    }
+  }
+
+  const all = document.querySelectorAll(".computer");
+  all.forEach((cell, index) => {
+    cell.addEventListener("click", () => {
+      if (isHumanTurn()) {
+        const row = Math.floor(index / 10);
+        const col = index % 10;
+
+        try {
+          console.log(isHumanTurn());
+          const result = computer.board.receiveAttack(row, col);
+          if (result === "hit") {
+            cell.classList.add("hit");
+          } else if (result === "miss") {
+            cell.classList.add("miss");
+          }
+          checkShipBoard(row, col, result);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          moon();
+        }
+      }
+    });
+  });
+}
+
+function checkShipBoard(r, c, result) {
+  const all = document.querySelectorAll(".child-c");
+  const index = r * 10 + c;
+  if (result === "hit") {
+    all[index].classList.add("hit");
+  } else if (result === "miss") {
+    all[index].classList.add("miss");
   }
 }
