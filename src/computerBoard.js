@@ -71,20 +71,24 @@ function playBoard() {
       if (isHumanTurn()) {
         const row = Math.floor(index / 10);
         const col = index % 10;
-
-        try {
-          console.log(isHumanTurn());
-          const result = computer.board.receiveAttack(row, col);
-          if (result === "hit") {
-            cell.classList.add("hit");
-          } else if (result === "miss") {
-            cell.classList.add("miss");
+        if (
+          !cell.classList.contains("miss") &&
+          !cell.classList.contains("hit")
+        ) {
+          try {
+            console.log(isHumanTurn());
+            const result = computer.board.receiveAttack(row, col);
+            if (result === "hit") {
+              cell.classList.add("hit");
+            } else if (result === "miss") {
+              cell.classList.add("miss");
+            }
+            checkShipBoard(row, col, result);
+          } catch (err) {
+            console.error(err);
+          } finally {
+            moon();
           }
-          checkShipBoard(row, col, result);
-        } catch (err) {
-          console.error(err);
-        } finally {
-          moon();
         }
       }
     });

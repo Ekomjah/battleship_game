@@ -69,14 +69,16 @@ function playBoard() {
 
   function robot() {
     if (!isHumanTurn()) {
-      const randomRow = Math.floor(Math.random() * 10);
-      const randomCol = Math.floor(Math.random() * 10);
+      const filtered = [...all].filter(
+        (el) => !el.classList.contains("miss") && !el.classList.contains("hit")
+      );
+      const randomRow = Math.floor((Math.random() * filtered.length) / 10);
+      const randomCol = Math.floor((Math.random() * filtered.length) / 10);
       try {
         console.log(isHumanTurn());
         const result = human.board.receiveAttack(randomRow, randomCol);
         const index = randomRow * 10 + randomCol;
-        const cell = all[index];
-        console.log(cell);
+        const cell = filtered[index];
         if (result === "hit") {
           cell.classList.add("hit");
         } else if (result === "miss") {
@@ -90,11 +92,9 @@ function playBoard() {
       }
     }
   }
-  const interval = setInterval(() => {
+  setInterval(() => {
     robot();
   }, 1000);
-
-  interval.clearInterval();
 }
 
 function checkShipBoard(r, c, result) {
