@@ -3,25 +3,30 @@ const human = new HumanPlayer("ekom");
 const root = document.querySelector("#root");
 const second = document.createElement("div");
 second.classList.add("border");
+const third = document.createElement("div");
+third.classList.add("border");
 root.appendChild(second);
+root.appendChild(third);
 export default function grid() {
   for (let i = 0; i < human.board.board.length; i++) {
     const gridParent = document.createElement("div");
     gridParent.classList.add("parent");
+    gridParent.classList.add("div");
     second.appendChild(gridParent);
     for (let j = 0; j < human.board.board[i].length; j++) {
       const gridChild = document.createElement("div");
-      gridChild.classList.add("child");
+      gridChild.classList.add("child-player");
 
       gridParent.appendChild(gridChild);
 
       try {
-        // Place ships horizontally and vertically
         human.board.placeShipFrom(4, 0, "horizontal", "carrier", 5);
         human.board.placeShipFrom(5, 6, "horizontal", "battleship", 4);
-        human.board.placeShipFrom(0, 4, "vertical", "cruiser", 3); // Vertical placement
-        human.board.placeShipFrom(6, 0, "vertical", "submarine", 3); // Vertical placement
+        human.board.placeShipFrom(0, 4, "vertical", "cruiser", 3);
+        human.board.placeShipFrom(6, 0, "vertical", "submarine", 3);
         human.board.placeShipFrom(9, 4, "horizontal", "destroyer", 2);
+        human.board.receiveAttack(0, 0);
+        human.board.receiveAttack(5, 5);
 
         for (let k = 0; k < human.board.board.length; k++) {
           const childDivs = gridParent.children;
@@ -33,15 +38,29 @@ export default function grid() {
             human.board.board[i][k] !== "hit"
           ) {
             childDiv.classList.add("ship");
-          } else if (human.board.board[i][j] === "miss") {
-            childDiv.classList.add("miss");
-          } else if (human.board.board[i][j] === "hit") {
+          } else if (human.board.board[i][k] === "hit") {
             childDiv.classList.add("hit");
+          } else if (human.board.board[i][k] === "miss") {
+            childDiv.classList.add("miss");
           }
         }
       } catch (err) {
         console.error(err);
       }
+    }
+  }
+  playBoard();
+}
+
+function playBoard() {
+  for (let i = 0; i < human.board.board.length; i++) {
+    const gridParent = document.createElement("div");
+    gridParent.classList.add("parent");
+    third.appendChild(gridParent);
+    for (let j = 0; j < human.board.board[i].length; j++) {
+      const gridChild = document.createElement("div");
+      gridChild.classList.add("child");
+      gridParent.appendChild(gridChild);
     }
   }
 
@@ -57,14 +76,21 @@ export default function grid() {
         } else if (result === "miss") {
           cell.classList.add("miss");
         }
+        checkShipBoard(row, col, result);
       } catch (err) {
         console.error(err);
       }
     });
   });
-  //   human.board.board.forEach((el, i) => {
-  //     human.board.board[i].forEach((item, j) => {
-  //       console.log(`board[${i}][${j}] = ${item}`);
-  //     });
-  //   });
+}
+
+function checkShipBoard(r, c, result) {
+  const all = document.querySelectorAll(".child-player");
+  console.log(all);
+  const index = r * 10 + c; // Assuming a 10x10 grid
+  if (result === "hit") {
+    all[index].classList.add("hit");
+  } else if (result === "miss") {
+    all[index].classList.add("miss");
+  }
 }

@@ -24,19 +24,23 @@ main {
   width: 100%;
 }
 
+.child-player,
 .child {
   border: 0.2px solid;
   padding: 1rem;
 }
 
+.child-player.ship,
 .child.ship {
   background-color: blue;
 }
 
+.child-player.hit,
 .child.hit {
   background-color: green;
 }
 
+.child-player.miss,
 .child.miss {
   background-color: red;
 }
