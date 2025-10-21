@@ -62,24 +62,41 @@ export class GameBoard {
       this.board[ordinate][abscissa] === "miss"
     )
       return null;
-    if (this.board[ordinate][abscissa] !== null) {
+    else if (
+      this.board[ordinate][abscissa] !== null &&
+      this.board[ordinate][abscissa] !== "hit" &&
+      this.board[ordinate][abscissa] !== "miss"
+    ) {
       const el = this.instance.find(
         (obj) => obj.name === this.board[ordinate][abscissa]
       );
-      if (!el.isSunk()) {
-        el.hit();
-        this.board[ordinate][abscissa] = "hit";
+
+      el.hit();
+      this.board[ordinate][abscissa] = "hit";
+      if (this.isGameOver()) {
+        console.log("game's over bro", this.isGameOver());
+        this.board = this.init();
+        return "isSunk";
+      } else {
         return "hit";
       }
-      return "isSunk";
     } else {
       return (this.board[ordinate][abscissa] = "miss");
     }
   }
+
+  isGameOver() {
+    let arr = [];
+    for (let i = 0; i < this.board.length; i++) {
+      const filter = this.board[i].filter((el) => el !== null && el !== "miss");
+      arr.push(...filter);
+    }
+    return arr.every((el) => el === "hit");
+  }
 }
 
 export class HumanPlayer {
-  constructor(name) {
+  constructor(name = null) {
     this.name = name;
     this.board = new GameBoard();
   }
@@ -91,3 +108,5 @@ export class Computer {
     this.board = new GameBoard();
   }
 }
+const playMe = new GameBoard();
+console.log(playMe.init());

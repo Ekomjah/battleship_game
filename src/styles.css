@@ -49,3 +49,14 @@ main {
 .child.miss {
   background-color: red;
 }
+
+.btn {
+  color: rgb(233, 116, 116);
+  font-weight: bold;
+  font-size: 1rem;
+  background: red;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
