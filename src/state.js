@@ -17,3 +17,23 @@ export function resetAll() {
   reset();
   resetComputerBoard();
 }
+
+export function randomPlacements() {
+  const shipLength = [5, 4, 3, 3, 2];
+  const pOrientation = ["vertical", "horizontal"];
+  const largeArr = [];
+
+  shipLength.forEach((el, i) => {
+    const chosenOrientation = pOrientation[Math.floor(Math.random() * 10) % 2];
+    if (chosenOrientation === "vertical") {
+      const ordinate = Math.floor(Math.random() * (10 - el));
+      const abscissa = Math.floor(Math.random() * 10);
+      largeArr.push({ chosenOrientation, ordinate, abscissa });
+    } else {
+      const ordinate = Math.floor(Math.random() * 10);
+      const abscissa = Math.floor(Math.random() * (10 - el));
+      largeArr.push({ chosenOrientation, ordinate, abscissa });
+    }
+  });
+  return largeArr;
+}

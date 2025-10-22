@@ -1,4 +1,4 @@
-import moon, { isHumanTurn } from "./state.js";
+import moon, { isHumanTurn, randomPlacements } from "./state.js";
 import { HumanPlayer, Computer } from "./ship.js";
 let computer = new Computer();
 const root = document.querySelector("#root");
@@ -16,6 +16,7 @@ export default function computerGrid() {
 }
 
 function renderBoard() {
+  const [a, b, c, d, e] = randomPlacements();
   for (let i = 0; i < computer.board.board.length; i++) {
     const gridParent = document.createElement("div");
     gridParent.classList.add("parent");
@@ -27,12 +28,41 @@ function renderBoard() {
       gridParent.appendChild(gridChild);
 
       try {
-        // Place ships horizontally and vertically
-        computer.board.placeShipFrom(4, 0, "horizontal", "carrier", 5);
-        computer.board.placeShipFrom(5, 6, "horizontal", "battleship", 4);
-        computer.board.placeShipFrom(0, 4, "vertical", "cruiser", 3); // Vertical placement
-        computer.board.placeShipFrom(6, 0, "vertical", "submarine", 3); // Vertical placement
-        computer.board.placeShipFrom(9, 4, "horizontal", "destroyer", 2);
+        computer.board.placeShipFrom(
+          a.ordinate,
+          a.abscissa,
+          a.chosenOrientation,
+          "carrier",
+          5
+        );
+        computer.board.placeShipFrom(
+          b.ordinate,
+          b.abscissa,
+          b.chosenOrientation,
+          "battleship",
+          4
+        );
+        computer.board.placeShipFrom(
+          c.ordinate,
+          c.abscissa,
+          c.chosenOrientation,
+          "cruiser",
+          3
+        );
+        computer.board.placeShipFrom(
+          d.ordinate,
+          d.abscissa,
+          d.chosenOrientation,
+          "submarine",
+          3
+        );
+        computer.board.placeShipFrom(
+          e.ordinate,
+          e.abscissa,
+          e.chosenOrientation,
+          "destroyer",
+          2
+        );
 
         for (let k = 0; k < computer.board.board.length; k++) {
           const childDivs = gridParent.children;

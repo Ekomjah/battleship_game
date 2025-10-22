@@ -1,4 +1,4 @@
-import moon, { isHumanTurn, resetAll } from "./state.js";
+import moon, { isHumanTurn, resetAll, randomPlacements } from "./state.js";
 import { HumanPlayer, Computer } from "./ship.js";
 
 let human = new HumanPlayer("ekom");
@@ -8,7 +8,7 @@ const second = document.createElement("div");
 second.classList.add("border");
 const third = document.createElement("div");
 third.classList.add("border");
-second.style.display = "none";
+// second.style.display = "none";
 root.appendChild(second);
 root.appendChild(third);
 
@@ -29,6 +29,8 @@ export default function grid() {
 }
 
 function renderBoard() {
+  const [a, b, c, d, e] = randomPlacements();
+
   for (let i = 0; i < human.board.board.length; i++) {
     const gridParent = document.createElement("div");
     gridParent.classList.add("parent");
@@ -41,11 +43,41 @@ function renderBoard() {
       gridParent.appendChild(gridChild);
 
       try {
-        human.board.placeShipFrom(4, 0, "horizontal", "carrier", 5);
-        human.board.placeShipFrom(5, 6, "horizontal", "battleship", 4);
-        human.board.placeShipFrom(0, 4, "vertical", "cruiser", 3);
-        human.board.placeShipFrom(6, 0, "vertical", "submarine", 3);
-        human.board.placeShipFrom(9, 4, "horizontal", "destroyer", 2);
+        human.board.placeShipFrom(
+          a.ordinate,
+          a.abscissa,
+          a.chosenOrientation,
+          "carrier",
+          5
+        );
+        human.board.placeShipFrom(
+          b.ordinate,
+          b.abscissa,
+          b.chosenOrientation,
+          "battleship",
+          4
+        );
+        human.board.placeShipFrom(
+          c.ordinate,
+          c.abscissa,
+          c.chosenOrientation,
+          "cruiser",
+          3
+        );
+        human.board.placeShipFrom(
+          d.ordinate,
+          d.abscissa,
+          d.chosenOrientation,
+          "submarine",
+          3
+        );
+        human.board.placeShipFrom(
+          e.ordinate,
+          e.abscissa,
+          e.chosenOrientation,
+          "destroyer",
+          2
+        );
 
         for (let k = 0; k < human.board.board.length; k++) {
           const childDivs = gridParent.children;
