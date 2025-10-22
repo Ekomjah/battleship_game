@@ -1,6 +1,5 @@
 import moon, { isHumanTurn } from "./state.js";
 import { HumanPlayer, Computer } from "./ship.js";
-import { human } from "./playerBoard.js";
 let computer = new Computer();
 const root = document.querySelector("#root");
 const first = document.createElement("div");
@@ -8,18 +7,8 @@ const third = document.createElement("div");
 root.appendChild(first);
 first.classList.add("border");
 third.classList.add("border");
+third.style.display = "none";
 root.appendChild(third);
-
-const btn = document.createElement("button");
-const randombtn = document.createElement("button");
-randombtn.textContent = "Randomly place ships";
-randombtn.classList.add("btn");
-randombtn.style.background = "blue";
-randombtn.style.color = "white";
-btn.classList.add("btn");
-btn.textContent = "Reset Board";
-root.appendChild(btn);
-root.appendChild(randombtn);
 
 export default function computerGrid() {
   renderBoard();
@@ -44,22 +33,6 @@ function renderBoard() {
         computer.board.placeShipFrom(0, 4, "vertical", "cruiser", 3); // Vertical placement
         computer.board.placeShipFrom(6, 0, "vertical", "submarine", 3); // Vertical placement
         computer.board.placeShipFrom(9, 4, "horizontal", "destroyer", 2);
-        computer.board.receiveAttack(4, 0);
-        computer.board.receiveAttack(4, 1);
-        computer.board.receiveAttack(4, 2);
-        computer.board.receiveAttack(4, 3);
-        computer.board.receiveAttack(4, 4);
-        computer.board.receiveAttack(4, 5);
-        computer.board.receiveAttack(5, 6);
-        computer.board.receiveAttack(5, 7);
-        computer.board.receiveAttack(0, 4);
-        computer.board.receiveAttack(1, 4);
-        computer.board.receiveAttack(2, 4);
-        computer.board.receiveAttack(6, 0);
-        computer.board.receiveAttack(7, 0);
-        computer.board.receiveAttack(8, 0);
-        computer.board.receiveAttack(9, 4);
-        computer.board.receiveAttack(9, 5);
 
         for (let k = 0; k < computer.board.board.length; k++) {
           const childDivs = gridParent.children;
@@ -70,10 +43,10 @@ function renderBoard() {
             computer.board.board[i][k] !== "hit"
           ) {
             childDiv.classList.add("ship");
-          } else if (computer.board.board[i][j] === "miss") {
-            gridChild.classList.add("miss");
-          } else if (computer.board.board[i][j] === "hit") {
-            gridChild.classList.add("hit");
+          } else if (computer.board.board[i][k] === "miss") {
+            childDiv.classList.add("miss");
+          } else if (computer.board.board[i][k] === "hit") {
+            childDiv.classList.add("hit");
           }
         }
       } catch (err) {
@@ -91,47 +64,71 @@ function playBoard() {
     for (let j = 0; j < computer.board.board[i].length; j++) {
       const gridChild = document.createElement("div");
       gridChild.classList.add("child");
-      gridChild.classList.add("computer");
+      gridChild.classList.add("aim");
+
+      for (let k = 0; k < computer.board.board.length; k++) {
+        const childDivs = gridParent.children;
+        const childDiv = childDivs[k];
+        if (computer.board.board[i][k] === "hit" && childDiv !== undefined) {
+          childDiv.classList.add("hites");
+        } else if (
+          computer.board.board[i][k] === "miss" &&
+          childDiv !== undefined
+        ) {
+          childDiv.classList.add("misses");
+        }
+      }
+
       gridParent.appendChild(gridChild);
     }
   }
 
-  const all = document.querySelectorAll(".computer");
-  all.forEach((cell, index) => {
-    cell.addEventListener("click", () => {
-      if (isHumanTurn()) {
-        const row = Math.floor(index / 10);
-        const col = index % 10;
-        if (
-          !cell.classList.contains("miss") &&
-          !cell.classList.contains("hit")
-        ) {
-          try {
-            const result = computer.board.receiveAttack(row, col);
-            console.log(result);
-            if (result === "isSunk") {
-              checkShipBoard(row, col, result);
-              alert("You won punk!");
-              reset();
-              // computer.board.board = computer.board.init();
+  const all = document.querySelectorAll(".aim");
 
-              console.log(computer.board);
-              return;
-            } else if (result === "hit") {
-              cell.classList.add("hit");
-            } else if (result === "miss") {
-              cell.classList.add("miss");
-            }
-            checkShipBoard(row, col, result);
-          } catch (err) {
-            console.error(err);
-          } finally {
-            moon();
-          }
-        }
+  function robot() {
+    if (!isHumanTurn()) {
+      const filtered = [...all].filter(
+        (el) =>
+          !el.classList.contains("misses") && !el.classList.contains("hites")
+      );
+      if (filtered.length === 0) {
+        alert("its a draw!");
+        return;
       }
-    });
-  });
+      const length = filtered.length;
+      const index = Math.floor(Math.random() * length);
+      const cell = filtered[index];
+      const indexOfPlayed = [...all].indexOf(cell);
+      console.log([...all][indexOfPlayed] === cell);
+      console.log(index, cell, indexOfPlayed);
+      const randomRow = Math.floor(indexOfPlayed / 10);
+      const randomCol = indexOfPlayed % 10;
+      try {
+        const result = computer.board.receiveAttack(randomRow, randomCol);
+        console.log(result);
+        if (result === "isSunk") {
+          cell.classList.add("hit");
+          cell.classList.add("hites");
+          alert("Computer wins!");
+          return;
+        } else if (result === "hit") {
+          cell.classList.add("hit");
+          cell.classList.add("hites");
+        } else if (result === "miss") {
+          cell.classList.add("miss");
+          cell.classList.add("misses");
+        }
+        checkShipBoard(randomRow, randomCol, result);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        moon();
+      }
+    }
+  }
+  setInterval(() => {
+    robot();
+  }, 1000);
 }
 
 function checkShipBoard(r, c, result) {
@@ -144,28 +141,15 @@ function checkShipBoard(r, c, result) {
   }
 }
 
-function reset() {
-  const all = document.querySelectorAll(".child");
-  const board = document.querySelectorAll(".child-c");
-  all.forEach((el) => {
-    if (el.classList.contains("hit") || el.classList.contains("miss")) {
-      el.classList.remove("hit");
-      el.classList.remove("miss");
-    }
-  });
-  board.forEach((el) => {
-    if (el.classList.contains("hit") || el.classList.contains("miss")) {
-      el.classList.remove("hit");
-      el.classList.remove("miss");
-      el.classList.remove("ship");
-    }
-  });
+export function resetComputerBoard() {
+  // Clear the board containers
+  first.innerHTML = "";
+  third.innerHTML = "";
 
-  computer.board.placeShipFrom(4, 0, "horizontal", "carrier", 5);
-  computer.board.placeShipFrom(5, 6, "horizontal", "battleship", 4);
-  computer.board.placeShipFrom(0, 4, "vertical", "cruiser", 3); // Vertical placement
-  computer.board.placeShipFrom(6, 0, "vertical", "submarine", 3); // Vertical placement
-  computer.board.placeShipFrom(9, 4, "horizontal", "destroyer", 2);
+  // Reset the human player instance
+  computer = new Computer("mac");
+
+  // Recreate the boards
+  renderBoard();
+  playBoard();
 }
-
-btn.addEventListener("click", reset);
