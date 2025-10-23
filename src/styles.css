@@ -51,10 +51,12 @@ main {
 }
 
 .btn {
-  color: rgb(233, 116, 116);
+  color: rgb(236, 200, 200);
   font-weight: bold;
   font-size: 1rem;
   background: red;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
 }
 
 .btn:hover {

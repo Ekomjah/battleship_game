@@ -8,7 +8,7 @@ const second = document.createElement("div");
 second.classList.add("border");
 const third = document.createElement("div");
 third.classList.add("border");
-// second.style.display = "none";
+second.style.display = "none";
 root.appendChild(second);
 root.appendChild(third);
 
@@ -116,6 +116,16 @@ function playBoard() {
   }
 
   const all = document.querySelectorAll(".human");
+
+  if (
+    [...all].every(
+      (cell) =>
+        cell.classList.contains("miss") || cell.classList.contains("hit")
+    )
+  ) {
+    alert("It's a draw!");
+    return;
+  }
   all.forEach((cell, index) => {
     cell.addEventListener("click", () => {
       if (isHumanTurn()) {
@@ -173,3 +183,7 @@ export function reset() {
 }
 
 btn.addEventListener("click", resetAll);
+randombtn.addEventListener("click", () => {
+  resetAll();
+  randomPlacements();
+});
